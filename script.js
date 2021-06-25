@@ -9,12 +9,14 @@ const gravity = .5;
 const speed = 6.2;
 const size = [33,49];           //Taille de l'oiseau (utilisé dans drawImage())
 const jump = -11.5;
-const cTenth = (canvas.height / 4);
+let cTenth = (canvas.height / 4);
 
-// pipe settings
-const pipeWidth = 78;           //largeur poteau
-const pipeGap = 270;            //ecart entre les poteaux 
-const pipeLoc = () => (Math.random() * ((canvas.height - (pipeGap + pipeWidth)) - pipeWidth)) + pipeWidth;
+
+
+// asteroid settings
+const astWidth = 78;           //largeur poteau
+// const pipeGap = 270;            //ecart entre les poteaux 
+const astLoc = () => (Math.random() * ((canvas.width - astWidth) - astWidth)) + astWidth;
                                 //fonction qui va placer les poteaux au hasard et en générer.
 
 
@@ -47,12 +49,43 @@ let render = () => {
     //ce qui donnera l'impression que c'est continue alors que c'est deux images qui se suivent petit à petit
 
     if (gamePlaying){
+        let posX = 0;
+        let posY = 0;
         ctx.drawImage(img, 432, 0, ...size, cTenth, flyHeight, ...size); 
                                                 //placer l'oiseau a gauche de l'ecran pour débuter le jeux
         flight += gravity;
         flyHeight = (canvas.height - size[1] - 30); 
                                                 //l'ajouter du canvas.height ... permet en gros de bloquer l'oiseau en bas de l'écran
 
+        //Add mouvment 
+        let actualPos = flyHeight;
+
+        function moveLeft(){
+            cTenth += -1/20;
+            if(cTenth <= 0){
+                cTenth = 0;
+            }
+        }
+        function moveRight(){
+            cTenth += 1/20;
+            if(cTenth >= 398){
+                cTenth = 398;
+            }
+            
+        }
+        window.addEventListener("keydown", function (event){
+            switch (event.key) {
+                case "ArrowLeft":
+                moveLeft();
+                 break;
+
+                 case "ArrowRight":
+                moveRight();
+                 break;
+
+            }
+        }
+        )
     }else{
     ctx.drawImage(img, 434, 0, ...size, ((canvas.width / 2 ) - size[0] / 2), flyHeight,...size);                            
                                                 //C'est lui qui va copier l'image original et l'ajouter sur le jeux                                           
@@ -62,6 +95,7 @@ let render = () => {
     ctx.fillText(`Meilleur score : ${bestScore}`, 55, 245);
     ctx.fillText('Cliquez pour jouer', 48, 535);
     ctx.font = "bold 30px courier";
+    
     }
 
             //////////////////////////////////  PIPE GENERATION  //////////////////////////////////////////////////
