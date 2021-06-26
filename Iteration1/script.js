@@ -1,7 +1,7 @@
 const canvas = document.getElementById('canvas');
 const ctx= canvas.getContext('2d');
 const img = new Image();
-img.src = './media/spaceShip-escape-set.png';
+img.src = '../media/spaceShip-escape-set.png';
 
 //general settings
 let gamePlaying = false;        //toggle : je joue ou non ?
@@ -11,6 +11,24 @@ const size = [33,49];           //Taille de l'oiseau (utilisé dans drawImage())
 const jump = -11.5;
 let cTenth = (canvas.height / 4);
 const astSize = [50,48];
+
+
+//Add mouvment 
+// let actualPos = flyHeight;
+
+function moveLeft(){
+    cTenth += -1/20;
+    if(cTenth <= 0){
+        cTenth = 0;
+    }
+}
+function moveRight(){
+    cTenth += 1/20;
+    if(cTenth >= 398){
+        cTenth = 398;
+    }
+    
+}
 
 
 
@@ -33,12 +51,36 @@ const setup = () =>{            // Cette variable permet de remettre a 0 le jeux
     flight = jump;
     flyHeight = (canvas.height / 2) - (size[1] / 2);
 
-    astroids = Array(3).fill().map((a, i) => [canvas.height + (i * astSize[1]), astLoc()]);
+    astroids = Array(3).fill().map((_a, i) => [canvas.height + (i * astSize[1]), astLoc()]);
                                 // Pipes est composé de 2 elements. Element 1 : calcule du rapprochement des poteaux sur l'oiseau
                                 // Element 2 : calcule de la hauteur de l'element (pour pas qu'ils soient tous allignés)
 }                               
 
 let render = () => {
+
+/////////////////////FPS/////////////////////
+window.countFPS = (function () {
+    var lastLoop = (new Date()).getMilliseconds();
+    var count = 1;
+    var fps = 0;
+  
+    return function () {
+      var currentLoop = (new Date()).getMilliseconds();
+      if (lastLoop > currentLoop) {
+        fps = count;
+        count = 1;
+      } else {
+        count += 1;
+      }
+      lastLoop = currentLoop;
+      return fps;
+    };
+  }());
+  
+  requestAnimationFrame(function () {
+    console.log(countFPS());
+  });
+/////////////////////FPS/////////////////////
     index ++;
 
     //backGround
@@ -50,30 +92,14 @@ let render = () => {
     //ce qui donnera l'impression que c'est continue alors que c'est deux images qui se suivent petit à petit
 
     if (gamePlaying){
-        let posX = 0;
-        let posY = 0;
+      
         ctx.drawImage(img, 432, 0, ...size, cTenth, flyHeight, ...size); 
                                                 //placer l'oiseau a gauche de l'ecran pour débuter le jeux
         flight += gravity;
         flyHeight = (canvas.height - size[1] - 30); 
                                                 //l'ajouter du canvas.height ... permet en gros de bloquer l'oiseau en bas de l'écran
 
-        //Add mouvment 
-        let actualPos = flyHeight;
-
-        function moveLeft(){
-            cTenth += -1/20;
-            if(cTenth <= 0){
-                cTenth = 0;
-            }
-        }
-        function moveRight(){
-            cTenth += 1/20;
-            if(cTenth >= 398){
-                cTenth = 398;
-            }
-            
-        }
+        
         window.addEventListener("keydown", function (event){
             switch (event.key) {
                 case "ArrowLeft":
@@ -87,24 +113,8 @@ let render = () => {
             }
         }
         )
-    }else{
-    ctx.drawImage(img, 434, 0, ...size, ((canvas.width / 2 ) - size[0] / 2), flyHeight,...size);                            
-                                                //C'est lui qui va copier l'image original et l'ajouter sur le jeux                                           
-    flyHeight = (canvas.height / 2) - (size[1] / 2);
 
-    //interface visuelle (écriture)
-    ctx.fillText(`Meilleur score : ${bestScore}`, 55, 245);
-    ctx.fillText('Cliquez pour jouer', 48, 535);
-    ctx.fillText('Pour vous déplacer utilsez les flèches gauche et droite', 48, 600, 350);
-    ctx.font = "bold 30px courier";
-    ctx.fillStyle = "white";
-    
-    }
-
-            //////////////////////////////////  ASTROID GENERATION  //////////////////////////////////////////////////
-
-    if(gamePlaying){     
-      astroids.map(asteroid => {
+        astroids.map(asteroid => {
           
 
             asteroid[0] -= speed;
@@ -115,41 +125,22 @@ let render = () => {
             
            test = 0;
             let astPosY = (index *(speed/1.5)) % canvas.height;
-           
 
-
-            // while( astPosY = 0){
-            //     newAstPosX = getRandomArbitrary(0, (432-astWidth));
-            //     astPosX = newAstPosX;
-            // };
-            // if(astPosY= 0){
-            //     newAstPosX = getRandomArbitrary(0, (432-astWidth));
-            //     astPosX = newAstPosX;
-                
-                
-            // }else{
-            //     astPosX = 0;
-            // }
-            
-            let alea = Math.random()*450; 
             //Asteroid
-            ctx.drawImage(img, 432, 52, astWidth, astSize[1], astPostX, astPosY,   astWidth, astSize[1]);
+            ctx.drawImage(img, 432, 52, astWidth, astSize[1], 150, astPosY,   astWidth, astSize[1]);
             
-           // ctx.drawImage(img, 0,0, canvas.width, canvas.height, 0, ((index *(speed)) % canvas.height) , canvas.width, canvas.height);
-
-            // //botom pipe
-            // ctx.drawImage(img, 432 + astWidth, 108, astWidth, canvas.height - pipe[1] + pipeGap, pipe[0], pipe[1] + pipeGap, astWidth, canvas.height - pipe[1] + pipeGap );
-             
-
             if (asteroid[0] <= -canvas.height){
                 currentScore ++;
                 bestScore = Math.max (bestScore, currentScore);
 
                 //remove pipe + new pipe
                 astroids = [...astroids.slice(1), [astroids[astroids.length-1][0] + pipeGap + astWidth, astLoc() ]];
+                
                                 //Quand un poteau sort a gauche on en regenere un autre a droite
             }
             ////////////////////////////////  PIPE GENERATION  //////////////////////////////////////////////////
+
+            
             ////////////////////////////////  END GAME  //////////////////////////////////////////////////
             //if hit the pipe, end
             // if([
@@ -164,9 +155,21 @@ let render = () => {
 
            
         })
-        
+    }else{
+    ctx.drawImage(img, 434, 0, ...size, ((canvas.width / 2 ) - size[0] / 2), flyHeight,...size);                            
+                                                //C'est lui qui va copier l'image original et l'ajouter sur le jeux                                           
+    flyHeight = (canvas.height / 2) - (size[1] / 2);
+
+    //interface visuelle (écriture)
+    ctx.fillText(`Meilleur score : ${bestScore}`, 55, 245);
+    ctx.fillText('Cliquez pour jouer', 48, 535);
+    ctx.fillText('Pour vous déplacer utilsez les flèches gauche et droite', 48, 600, 350);
+    ctx.font = "bold 30px courier";
+    ctx.fillStyle = "white";
+    
     }
- //////////////////////////////////  END GAME  //////////////////////////////////////////////////
+
+        
     
     document.getElementById('bestScore').innerHTML = `Meilleur : ${bestScore}`;
     document.getElementById('currentScore').innerHTML = `Actuel : ${currentScore}`;
@@ -183,5 +186,5 @@ setup();
 img.onload = render;                            //Au chargement de l'image, on lance le render
 document.addEventListener('click', () => gamePlaying = true);
                                                 //Fonction fléché, au click, gamePlayin passe a trou donc le jeux se lance
-window.onclick = () => flight = jump;           // le jump ici va permettre de faire sauter l'oiseau. I
+
 
