@@ -95,7 +95,9 @@ let render = () => {
     //interface visuelle (écriture)
     ctx.fillText(`Meilleur score : ${bestScore}`, 55, 245);
     ctx.fillText('Cliquez pour jouer', 48, 535);
+    ctx.fillText('Pour vous déplacer utilsez les flèches gauche et droite', 48, 600, 350);
     ctx.font = "bold 30px courier";
+    ctx.fillStyle = "white";
     
     }
 
@@ -113,7 +115,9 @@ let render = () => {
             
            test = 0;
             let astPosY = (index *(speed/1.5)) % canvas.height;
-            console.log(test++);
+           
+
+
             // while( astPosY = 0){
             //     newAstPosX = getRandomArbitrary(0, (432-astWidth));
             //     astPosX = newAstPosX;
@@ -127,14 +131,15 @@ let render = () => {
             //     astPosX = 0;
             // }
             
-
+            let alea = Math.random()*450; 
             //Asteroid
-            ctx.drawImage(img, 432, 52, astWidth, astSize[1], 350, astPosY,   astWidth, astSize[1]);
+            ctx.drawImage(img, 432, 52, astWidth, astSize[1], astPostX, astPosY,   astWidth, astSize[1]);
             
            // ctx.drawImage(img, 0,0, canvas.width, canvas.height, 0, ((index *(speed)) % canvas.height) , canvas.width, canvas.height);
 
             // //botom pipe
             // ctx.drawImage(img, 432 + astWidth, 108, astWidth, canvas.height - pipe[1] + pipeGap, pipe[0], pipe[1] + pipeGap, astWidth, canvas.height - pipe[1] + pipeGap );
+             
 
             if (asteroid[0] <= -canvas.height){
                 currentScore ++;
