@@ -17,8 +17,8 @@ var ship = {
   width : 33,
   height : 49,
   vitesse : 49,
-  posX : (canvas.width / 2 ) - (33 / 2),
-  posY : (canvas.height / 2) - (49/2)
+  posX : 0,  
+  posY : 0 
 
 }
 
@@ -72,8 +72,40 @@ function draw(){
 ///////////////////////////////////////////
 ///////////////Animation///////////////////
 
+function moveLeft(){
+  ship.posX += +10;
+  if( ship.posX <= 0){
+    ship.posX = 0;
+  }
+}
+function moveRight(){
+  ship.posY += -10;
+  if(ship.posY >= 398){
+    ship.posY = 398;
+  }
+  
+}
+
 function render(){
-  //Refresh coordonné
+  if(gamePlaying){
+    console.log("Game is playing");
+
+    //Ship position
+    ship.posX = (canvas.width / 2 ) - (33 / 2);
+    ship.posY = (canvas.height /6) * 5 ;
+    
+  }else{
+
+    //Ship position
+    ship.posX = (canvas.width / 2 ) - (33 / 2);
+    ship.posY = (canvas.height / 2) - (49/2);
+
+  }
+    
+
+  
+
+
   //SI gameplaying = VRAI 
   // => coordonnée vaisseau en bas de l'ecran
   //Appelle function draw()
@@ -85,22 +117,8 @@ function render(){
 
 img.onload = render();  
 
-if(gamePlaying){
 
-}
-function moveLeft(){
-  positionY += -1;
-  if(positionY <= 0){
-    positionY = 0;
-  }
-}
-function moveRight(){
-  positionX += 1;
-  if(positionX >= 398){
-      positionX = 398;
-  }
-  
-}
+
 
 window.addEventListener("keydown", function (event){
   switch (event.key) {
