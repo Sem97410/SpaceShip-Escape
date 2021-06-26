@@ -49,7 +49,6 @@ function drawShip(){
 function drawAst(){
   ctx.drawImage(img,432, 52, asteroid.width, asteroid.height, asteroid.posX, asteroid.posY, asteroid.width, asteroid.height)
 }
-
 //Home writings
 function drawWriting(){
   ctx.fillText(`Meilleur score : ${bestScore}`, 55, 245);
@@ -59,46 +58,81 @@ function drawWriting(){
   ctx.fillStyle = "white";
 }
 
+//General draw
+function generalDraw(){
+  drawBackground();
+  
+}
+
+
 //fonction dessin
 function draw(){
-  drawBackground();
+ 
   drawShip();
-  drawWriting();
-  if(gamePlaying){
-    drawAst();
-  }
+
+  
 }
 
 ///////////////////////////////////////////
 ///////////////Animation///////////////////
 
 function moveLeft(){
-  ship.posX += +10;
-  if( ship.posX <= 0){
+  console.log("fleche gauche enfoncé");
+  ship.posX += -20;
+  if(ship.posX <= 0){
     ship.posX = 0;
   }
 }
 function moveRight(){
-  ship.posY += -10;
-  if(ship.posY >= 398){
-    ship.posY = 398;
+  console.log("fleche droite enfoncé");
+  ship.posX += 20;
+  if(ship.posX >= 398){
+    ship.posX = 398;
   }
-  
 }
 
+
+
+
 function render(){
+  generalDraw();
+
   if(gamePlaying){
-    console.log("Game is playing");
 
     //Ship position
     ship.posX = (canvas.width / 2 ) - (33 / 2);
     ship.posY = (canvas.height /6) * 5 ;
+
+    //asteroid
+    drawAst();
+
+    //movment
+    window.addEventListener("keydown", function (event){
+      switch (event.key) {
+          case "ArrowLeft":
+          moveLeft();
+          drawShip();
+           break;
+    
+           case "ArrowRight":
+          moveRight();
+          drawShip();
+           break;
+    
+      }
+    })
     
   }else{
 
     //Ship position
     ship.posX = (canvas.width / 2 ) - (33 / 2);
     ship.posY = (canvas.height / 2) - (49/2);
+
+    //Home
+    drawWriting();
+
+    //Writtings
+    
 
   }
     
@@ -120,17 +154,6 @@ img.onload = render();
 
 
 
-window.addEventListener("keydown", function (event){
-  switch (event.key) {
-      case "ArrowLeft":
-      moveLeft();
-       break;
 
-       case "ArrowRight":
-      moveRight();
-       break;
-
-  }
-})
 
 document.addEventListener('click', () => gamePlaying = true);
