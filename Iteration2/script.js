@@ -7,23 +7,26 @@ const img = new Image();
 let index = 0;
 const speed = 6.2;
 img.src = '../media/spaceShip-escape-set.png';
+let bestScore = 0;
 
 let gamePlaying = false; 
 
 
 
-var vaisseau = {
-  posX : 250,
-  posY : 250,
-  largeur : 33,
-  vitesse : 49
+var ship = {
+  width : 33,
+  height : 49,
+  vitesse : 49,
+  posX : (canvas.width / 2 ) - (33 / 2),
+  posY : (canvas.height / 2) - (49/2)
+
 }
 
 var asteroid = {
  posX : 0,
  posY : 0,
- largeur : 100,
- hauteur : 100,
+ width : 50,
+ height : 48,
  vitesse : 30
 }
 
@@ -35,18 +38,28 @@ function drawBackground() {
   index++;
   ctx.drawImage(img, 0,0, canvas.width, canvas.height, 0, ((index *speed) % canvas.height) , canvas.width, canvas.height);   
   ctx.drawImage(img, 0,0, canvas.width, canvas.height, 0, ((index *speed) % canvas.height) - canvas.height, canvas.width, canvas.height);
+}
 
+//Ship
+function drawShip(){
+  ctx.drawImage(img, 434, 0, ship.width, ship.height, ((canvas.width / 2 ) - (ship.width / 2)), ship.posY,ship.width, ship.height);  
+}
 
+//Home writings
+function drawWriting(){
+  ctx.fillText(`Meilleur score : ${bestScore}`, 55, 245);
+  ctx.fillText('Cliquez pour jouer', 48, 535);
+  ctx.fillText('Pour vous déplacer utilsez les flèches gauche et droite', 48, 600, 350);
+  ctx.font = "bold 30px courier";
+  ctx.fillStyle = "white";
 }
 
 //fonction dessin
 function draw(){
   drawBackground();
-  //vaisseau
+  drawShip();
+  drawWriting();
   //asteroid
-  //background
-
- 
 
 }
 

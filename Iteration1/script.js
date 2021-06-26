@@ -163,7 +163,7 @@ window.countFPS = (function () {
     //interface visuelle (écriture)
     ctx.fillText(`Meilleur score : ${bestScore}`, 55, 245);
     ctx.fillText('Cliquez pour jouer', 48, 535);
-    ctx.fillText('Pour vous déplacer utilsez les flèches gauche et droite', 48, 600, 350);
+    ctx.fillText('Pour vous déplacer utilsez les flèches gauche et droite', canvas.width / 2, 600, 331);
     ctx.font = "bold 30px courier";
     ctx.fillStyle = "white";
     
