@@ -31,7 +31,7 @@ var asteroid = {
 }
 
 ///////////////////////////////////////////
-///////////////////////////////////////////
+//////////////////Draw/////////////////////
 
 //Background
 function drawBackground() {
@@ -43,6 +43,11 @@ function drawBackground() {
 //Ship
 function drawShip(){
   ctx.drawImage(img, 434, 0, ship.width, ship.height, ((canvas.width / 2 ) - (ship.width / 2)), ship.posY,ship.width, ship.height);  
+}
+
+//asteroid
+function drawAst(){
+  ctx.drawImage(img,432, 52, asteroid.width, asteroid.height, asteroid.posX, asteroid.posY, asteroid.width, asteroid.height)
 }
 
 //Home writings
@@ -59,14 +64,13 @@ function draw(){
   drawBackground();
   drawShip();
   drawWriting();
-  //asteroid
-
+  if(gamePlaying){
+    drawAst();
+  }
 }
 
-
 ///////////////////////////////////////////
-///////////////////////////////////////////
-
+///////////////Animation///////////////////
 
 function render(){
   //Refresh coordonné
@@ -81,18 +85,9 @@ function render(){
 
 img.onload = render();  
 
+if(gamePlaying){
 
-
-
-
-//function setShipPos(){
-// positionY += 75%
-//PositionX += 50%
-//}
-
-
-
-
+}
 function moveLeft(){
   positionY += -1;
   if(positionY <= 0){
