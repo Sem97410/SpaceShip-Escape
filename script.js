@@ -10,20 +10,21 @@ const speed = 6.2;
 const size = [33,49];           //Taille de l'oiseau (utilisé dans drawImage())
 const jump = -11.5;
 let cTenth = (canvas.height / 4);
+const astSize = [50,48];
 
 
 
 // asteroid settings
-const astWidth = 78;           //largeur poteau
-// const pipeGap = 270;            //ecart entre les poteaux 
-const astLoc = () => (Math.random() * ((canvas.width - astWidth) - astWidth)) + astWidth;
+const astWidth = astSize[0];           //largeur poteau
+const pipeGap = 270;            //ecart entre les poteaux 
+const astLoc = () => (Math.random() * ((canvas.height - astSize[1]) - astSize[1])) + astSize[1];
                                 //fonction qui va placer les poteaux au hasard et en générer.
 
 
 let index = 0,
     bestScore = 0,
     currentScore = 0,
-    pipes = [],
+    astroids = [],
     flight,
     flyHeight;
 
@@ -32,7 +33,7 @@ const setup = () =>{            // Cette variable permet de remettre a 0 le jeux
     flight = jump;
     flyHeight = (canvas.height / 2) - (size[1] / 2);
 
-    pipes = Array(3).fill().map((a, i) => [canvas.width + (i * (pipeGap + pipeWidth)), pipeLoc()]);
+    astroids = Array(3).fill().map((a, i) => [canvas.height + (i * astSize[1]), astLoc()]);
                                 // Pipes est composé de 2 elements. Element 1 : calcule du rapprochement des poteaux sur l'oiseau
                                 // Element 2 : calcule de la hauteur de l'element (pour pas qu'ils soient tous allignés)
 }                               
@@ -98,29 +99,54 @@ let render = () => {
     
     }
 
-            //////////////////////////////////  PIPE GENERATION  //////////////////////////////////////////////////
-    //pipe display
-    // if(gamePlaying){
-    //     pipes.map(pipe => {
-    //         pipe[0] -= speed;
+            //////////////////////////////////  ASTROID GENERATION  //////////////////////////////////////////////////
 
-    //         //top pipe
-    //         ctx.drawImage(img, 432, 588 - pipe[1], pipeWidth, pipe[1], pipe[0], 0, pipeWidth, pipe[1]);
+    if(gamePlaying){     
+      astroids.map(asteroid => {
+          
 
-    //         //botom pipe
-    //         ctx.drawImage(img, 432 + pipeWidth, 108, pipeWidth, canvas.height - pipe[1] + pipeGap, pipe[0], pipe[1] + pipeGap, pipeWidth, canvas.height - pipe[1] + pipeGap );
+            asteroid[0] -= speed;
 
-    //         if (pipe[0] <= -pipeWidth){
-    //             currentScore ++;
-    //             bestScore = Math.max (bestScore, currentScore);
+            function getRandomArbitrary(min, max) {
+                return Math.random() * (max - min) + min;
+              }
+            
+           test = 0;
+            let astPosY = (index *(speed/1.5)) % canvas.height;
+            console.log(test++);
+            // while( astPosY = 0){
+            //     newAstPosX = getRandomArbitrary(0, (432-astWidth));
+            //     astPosX = newAstPosX;
+            // };
+            // if(astPosY= 0){
+            //     newAstPosX = getRandomArbitrary(0, (432-astWidth));
+            //     astPosX = newAstPosX;
+                
+                
+            // }else{
+            //     astPosX = 0;
+            // }
+            
 
-    //             //remove pipe + new pipe
-    //             pipes = [...pipes.slice(1), [pipes[pipes.length-1][0] + pipeGap + pipeWidth, pipeLoc() ]];
-    //                             //Quand un poteau sort a gauche on en regenere un autre a droite
-    //         }
-            //////////////////////////////////  PIPE GENERATION  //////////////////////////////////////////////////
-            //////////////////////////////////  END GAME  //////////////////////////////////////////////////
-            // if hit the pipe, end
+            //Asteroid
+            ctx.drawImage(img, 432, 52, astWidth, astSize[1], 350, astPosY,   astWidth, astSize[1]);
+            
+           // ctx.drawImage(img, 0,0, canvas.width, canvas.height, 0, ((index *(speed)) % canvas.height) , canvas.width, canvas.height);
+
+            // //botom pipe
+            // ctx.drawImage(img, 432 + astWidth, 108, astWidth, canvas.height - pipe[1] + pipeGap, pipe[0], pipe[1] + pipeGap, astWidth, canvas.height - pipe[1] + pipeGap );
+
+            if (asteroid[0] <= -canvas.height){
+                currentScore ++;
+                bestScore = Math.max (bestScore, currentScore);
+
+                //remove pipe + new pipe
+                astroids = [...astroids.slice(1), [astroids[astroids.length-1][0] + pipeGap + astWidth, astLoc() ]];
+                                //Quand un poteau sort a gauche on en regenere un autre a droite
+            }
+            ////////////////////////////////  PIPE GENERATION  //////////////////////////////////////////////////
+            ////////////////////////////////  END GAME  //////////////////////////////////////////////////
+            //if hit the pipe, end
             // if([
             //     pipe[0] <= cTenth + size[0],
             //     pipe[0] + pipeWidth >= cTenth, //SI l'oiseau se situe au niveau (Y) d'un poteau
@@ -132,9 +158,9 @@ let render = () => {
             // }
 
            
-    //     })
+        })
         
-    // }
+    }
  //////////////////////////////////  END GAME  //////////////////////////////////////////////////
     
     document.getElementById('bestScore').innerHTML = `Meilleur : ${bestScore}`;
