@@ -1,33 +1,22 @@
+// MAIN
+document.addEventListener('click', () => gamePlaying = true);
 
-//General settings
+///////////////////////////////////////////
+///////////////controls///////////////////
 
-const canvas = document.getElementById('canvas');
-const ctx= canvas.getContext('2d');
-const img = new Image();
-let index = 0;
-const speed = 6.2;
-img.src = '../media/spaceShip-escape-set.png';
-let bestScore = 0;
-
-let gamePlaying = false; 
-
-
-
-var ship = {
-  width : 33,
-  height : 49,
-  vitesse : 49,
-  posX : 0,  
-  posY : 0 
-
+function moveLeft(){
+  console.log("fleche gauche enfoncé");
+  ship.posX += -20;
+  if(ship.posX <= 0){
+    ship.posX = 0;
+  }
 }
-
-var asteroid = {
- posX : 0,
- posY : 0,
- width : 50,
- height : 48,
- vitesse : 30
+function moveRight(){
+  console.log("fleche droite enfoncé");
+  ship.posX += 20;
+  if(ship.posX >= 398){
+    ship.posX = 398;
+  }
 }
 
 ///////////////////////////////////////////
@@ -73,23 +62,7 @@ function draw(){
   
 }
 
-///////////////////////////////////////////
-///////////////Animation///////////////////
 
-function moveLeft(){
-  console.log("fleche gauche enfoncé");
-  ship.posX += -20;
-  if(ship.posX <= 0){
-    ship.posX = 0;
-  }
-}
-function moveRight(){
-  console.log("fleche droite enfoncé");
-  ship.posX += 20;
-  if(ship.posX >= 398){
-    ship.posX = 398;
-  }
-}
 
 
 
@@ -156,4 +129,3 @@ img.onload = render();
 
 
 
-document.addEventListener('click', () => gamePlaying = true);
